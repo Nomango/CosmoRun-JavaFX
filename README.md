@@ -5,6 +5,10 @@
 ### 首先
 这个游戏是完全仿照Windows应用商店中的同名游戏(Cosmo Run)制作的，目的是学习javafx，本人不用来进行任何商业活动。
 
+### 下载地址
+
+[CosmoRun v2.1 下载地址](https://github.com/Nomango/CosmoRun-JavaFX/releases/latest)
+
 ### 游戏截图
 ![preview](https://github.com/Nomango/CosmoRun-JavaFX/raw/master/images/preview.png)
 
