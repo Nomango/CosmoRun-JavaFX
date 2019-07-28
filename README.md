@@ -1,5 +1,7 @@
 # CosmoRun-JavaFX
 
+最后更新：2017.3.30
+
 ### 首先
 这个游戏是完全仿照Windows应用商店中的同名游戏(Cosmo Run)制作的，目的是学习javafx，本人不用来进行任何商业活动。
 
