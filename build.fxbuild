@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://org.eclipse.fx.ide.jdt/1.0" buildDirectory="${project}/build">
-  <deploy packagingFormat="rpm">
-    <application name="CosmoRun" mainclass="launcher.GameLauncher" version="1.6"/>
-    <info title="CosmoRun" vendor="LittleSShark"/>
-  </deploy>
-  <signjar/>
-</anttasks:AntTask>
