@@ -10,7 +10,7 @@ public class Fade {
 	private FadeTransition ft;
 	
 	public Fade(Node root) {
-		ft = new FadeTransition(Duration.millis(300), root);
+		ft = new FadeTransition(Duration.millis(200), root);
 		ft.setFromValue(1.0);
 		ft.setToValue(0.0);
 		ft.play();
@@ -21,7 +21,7 @@ public class Fade {
 	}
 	
 	public static void setNode(Node root) {
-		FadeTransition ft = new FadeTransition(Duration.millis(300), root);
+		FadeTransition ft = new FadeTransition(Duration.millis(200), root);
 		ft.setFromValue(1.0);
 		ft.setToValue(0.0);
 		ft.play();

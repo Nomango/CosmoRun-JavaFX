@@ -1,5 +1,6 @@
-package game.button;
+package game.pane.menu;
 
+import game.baseButton.HexagonButton;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;

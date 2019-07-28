@@ -7,24 +7,61 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import game.pane.background.Background;
+
 public class LoadGame {
-	private static File loadDirectory = new File("D://Program Files//Cosmo Run");
 	private static File loadFile = new File("D://Program Files//Cosmo Run//save.bin");
 	private static String errorMessage = "      Cannot Load Game!\n        ";
+	private static int bestScore, bkMode, soundSwitch;
 
-	public static boolean canLoad() {
-		if (!loadDirectory.exists() && !loadDirectory.isDirectory()) {
-			// 储存文件夹不存在返回 false
-			return false;
-		} else if (!loadFile.exists()) {
+	public static void readArchive() {
+		// 检查存档是否存在
+		if (LoadGame.canLoad()) {
+			// 读取存档
+			String archive = LoadGame.read();
+			// 检查存档是否合法
+			if (!isLegal(archive)) {
+				JOptionPane.showMessageDialog(null, errorMessage + "ERROR: 数据非法");
+				return;
+			} else {
+				Game.firstPlay = false;
+				Game.setBestScore(bestScore);
+				Game.bkMode = bkMode;
+				Game.soundSwitch = soundSwitch == 1 ? true : false;
+			}
+		}
+	}
+	
+	private static boolean canLoad() {
+		if (!loadFile.exists()) {
+			// 存档不存在返回 false
 			return false;
 		} else {
 			return true;
 		}
 	}
 	
-	public static String load() {
-		String loadMessage = null;
+	private static boolean isLegal(String s) {
+		// 存档字符串长度为 12
+		if (s.length() != 12) return false;
+		// 存档内容全为数字
+		for (int i = 0; i < s.length(); i++) {
+			if (!Character.isDigit(s.charAt(i)))
+				return false;
+		}
+		// 检查存档数据是否合法
+		bestScore = Integer.parseInt(s.substring(0, 10));
+		bkMode = Integer.parseInt(s.substring(10, 11));
+		soundSwitch = Integer.parseInt(s.substring(11));
+		if (bkMode >= Background.MAX_MODE || 
+				!(soundSwitch == 0 || soundSwitch == 1))
+			return false;
+		// 合法返回 true
+		return true;
+	}
+	
+	private static String read() {
+		String loadMessage = "";
 		try {
 			FileInputStream fis = new FileInputStream(loadFile);
 			try {
@@ -33,7 +70,6 @@ public class LoadGame {
 				while ((value = fis.read(bytes)) != -1) {
 					loadMessage = new String(bytes, 0, value);
 				}
-				return loadMessage;
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, errorMessage + "ERROR:0x000001");
 			} finally {

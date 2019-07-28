@@ -1,5 +1,6 @@
-package game.button;
+package game.pane.menu;
 
+import game.baseButton.HexagonButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -16,9 +17,9 @@ public class PlayButton extends HexagonButton{
 
 	private void initProperty() {
 		text.setFill(Color.WHITE);
-		text.setLayoutX(-108 / 2);
+		text.setLayoutX(-100 / 2);
 		text.setLayoutY(35 / 2);
-		text.setFont(Font.font("TimesRomes", FontWeight.BOLD, 43));
+		text.setFont(Font.font("TimeRomes", FontWeight.BOLD, 40));
 		this.getChildren().add(text);
 		
 		this.setInsideColor(null);

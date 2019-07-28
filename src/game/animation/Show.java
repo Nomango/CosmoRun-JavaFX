@@ -11,7 +11,7 @@ public class Show {
 	
 	public static void setNode(Node root) {
 		root.setOpacity(0.0);
-		FadeTransition ft = new FadeTransition(Duration.millis(300), root);
+		FadeTransition ft = new FadeTransition(Duration.millis(200), root);
 		ft.setFromValue(0.0);
 		ft.setToValue(1.0);
 		ft.play();
@@ -19,7 +19,7 @@ public class Show {
 	
 	public Show(Node root) {
 		root.setOpacity(0.0);
-		ft = new FadeTransition(Duration.millis(300), root);
+		ft = new FadeTransition(Duration.millis(200), root);
 		ft.setFromValue(0.0);
 		ft.setToValue(1.0);
 		ft.play();

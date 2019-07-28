@@ -1,7 +1,7 @@
 package game.object;
 
 import game.Game;
-import game.object.Floor.MainMode;
+import game.object.FloorManager.MainMode;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,7 +46,7 @@ public class Ball extends Circle{
 	}
 
 	public boolean isOn(double dx, double dy) {
-		return onFloor.shapeContains(Game.width / 2 - dx, Game.height / 2 - dy);
+		return onFloor.contains(Game.width / 2 - dx, Game.height / 2 - dy);
 	}
 	
 	public void hide() {
@@ -64,7 +64,6 @@ public class Ball extends Circle{
 	public void show() {
 		this.setScaleX(0.0);
 		this.setScaleY(0.0);
-		this.setFill(Color.hsb(0, 0.0, 1.0));
 		ScaleTransition scaleAnimation = new ScaleTransition(Duration.millis(400), this);
 		scaleAnimation.setByX(1.0f);
 		scaleAnimation.setByY(1.0f);

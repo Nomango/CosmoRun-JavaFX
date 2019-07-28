@@ -1,15 +1,15 @@
-package game.pane;
+package game.pane.howtoplay;
 
 import game.Game;
-import game.button.CloseButton;
+import game.animation.Fade;
+import game.baseButton.CloseButton;
+import game.pane.background.MenuBackground;
+import game.pane.menu.Menu;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -20,37 +20,42 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-public class HowToPlayPane extends Pane{
-	public boolean status = true;
-	private CloseButton closeButton = new CloseButton();
-	private Rectangle background1 = new Rectangle(0, 0, Game.width, Game.height * 0.25);
-	private Rectangle background2 = new Rectangle(0, Game.height * 0.25, Game.width, Game.height);
-	private Text howToPlayTitle = new Text("How To Play");
-	private Rectangle space = new Rectangle(140, 550, 500, 125);
-	private Hand hand = new Hand();
-	private Group light = new Group();
-	private Circle ball = new Circle(1000, 700 - 55 * 4, 25);
-	private Polygon arrow = new Polygon();
-	private Text howToPlayText;
+public class HowToPlay {
+	public static Pane pane = new Pane();
+	public static boolean status = false;
+	private static CloseButton closeButton = new CloseButton();
+	private static Text howToPlayTitle = new Text("How To Play");
+	private static Rectangle space = new Rectangle(140, 550, 500, 125);
+	private static Hand hand = new Hand();
+	private static Group light = new Group();
+	private static Circle ball = new Circle(1000, 700 - 55 * 4, 25);
+	private static Polygon arrow = new Polygon();
+	private static Text howToPlayText;
+	private static Timeline tl;
 	
-	public HowToPlayPane() {
-		initBackground();
+	public static void load() {
 		init();
+	}
+	
+	private static void init() {
+		pane.getChildren().add(new MenuBackground(Color.rgb(30, 56, 113, 0.8), 
+				Color.rgb(32, 45, 98, 0.9)));
 		
-		this.setCache(true);
-		this.setCacheHint(CacheHint.SPEED);
-	}
-	
-	private void initBackground() {
-		background1.setFill(Color.rgb(30, 56, 113, 0.8));
-		background2.setFill(Color.rgb(32, 45, 98, 0.9));
-		this.getChildren().addAll(background1, background2);
-	}
-	
-	private void init() {
 		closeButton.setLayoutX(110);
 		closeButton.setLayoutY(110);
-		this.getChildren().add(closeButton);
+		closeButton.setOnMouseClicked(e -> {
+			if (status) {
+				status = false;
+				Fade fade = new Fade(pane);
+				fade.setOnFinished(f -> {
+					Game.showPane(Menu.pane);
+					Menu.pane.requestFocus();
+					Menu.status = true;
+				});
+				tl.stop();
+			}
+		});
+		pane.getChildren().add(closeButton);
 		
 		howToPlayTitle.setLayoutX(Game.width / 2 - 180);
 		howToPlayTitle.setLayoutY(130);
@@ -59,7 +64,7 @@ public class HowToPlayPane extends Pane{
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
 		howToPlayTitle.setEffect(dropShadow);
-		this.getChildren().add(howToPlayTitle);
+		pane.getChildren().add(howToPlayTitle);
 		
 		howToPlayText = new Text("Press Space to make a turn");
 		howToPlayText.setLayoutX(110);
@@ -67,7 +72,7 @@ public class HowToPlayPane extends Pane{
 		howToPlayText.setFill(Color.WHITE);
 		howToPlayText.setFont(Font.font("Œ¢»Ì—≈∫⁄",FontWeight.BOLD, 45));
 		howToPlayText.setEffect(dropShadow);
-		this.getChildren().add(howToPlayText);
+		pane.getChildren().add(howToPlayText);
 		
 		space.setArcWidth(40);
 		space.setArcHeight(40);
@@ -75,12 +80,12 @@ public class HowToPlayPane extends Pane{
 		space.setStrokeWidth(5);
 		space.setFill(null);
 		space.setEffect(dropShadow);
-		this.getChildren().add(space);
+		pane.getChildren().add(space);
 		
 		hand.setLayoutX(450);
 		hand.setLayoutY(600);
 		hand.setEffect(dropShadow);
-		this.getChildren().add(hand);
+		pane.getChildren().add(hand);
 		
 		Rectangle r1 = new Rectangle(350, 580, 15, 50);
 		Rectangle r2 = new Rectangle(420, 530, 15, 50);
@@ -98,7 +103,7 @@ public class HowToPlayPane extends Pane{
 		
 		ball.setFill(Color.WHITE);
 		ball.setEffect(new BoxBlur(3, 3, 2));
-		this.getChildren().add(ball);
+		pane.getChildren().add(ball);
 		
 		arrow.getPoints().addAll(
 				0.0, 0.0, 95.0, -55.0, 
@@ -109,37 +114,36 @@ public class HowToPlayPane extends Pane{
 		arrow.setLayoutY(700 - 120);
 		arrow.setFill(Color.hsb(0, 0.0, 1.0, 0.5));
 		arrow.setEffect(dropShadow);
-		this.getChildren().add(arrow);
+		pane.getChildren().add(arrow);
 		
-		Timeline tl = new Timeline(new KeyFrame(Duration.millis(500), e -> {
+		tl = new Timeline(new KeyFrame(Duration.millis(500), e -> {
 			if (hand.getScaleX() == 1.0) {
 				hand.setScaleX(0.8);
 				hand.setScaleY(0.8);
-				this.getChildren().add(light);
+				pane.getChildren().add(light);
 			} else {
 				hand.setScaleX(1.0);
 				hand.setScaleY(1.0);
-				this.getChildren().remove(light);
+				pane.getChildren().remove(light);
 			}
 		}));
 		tl.setCycleCount(-1);
+	}
+	
+	public static void play() {
 		tl.play();
 	}
 	
-	public void setBtCloseOnMouseClicked(EventHandler<? super MouseEvent> e) {
-		this.closeButton.setOnMouseClicked(e);
+	private static void createSixFloor() {
+		pane.getChildren().add(new Floor(1000, 700));
+		pane.getChildren().add(new Floor(1000 - 95, 700 - 55));
+		pane.getChildren().add(new Floor(1000 - 95 * 2, 700 - 55 * 2));
+		pane.getChildren().add(new Floor(1000 - 95, 700 - 55 * 3));
+		pane.getChildren().add(new Floor(1000, 700 - 55 * 4));
+		pane.getChildren().add(new Floor(1000 + 95, 700 - 55 * 5));
 	}
 	
-	private void createSixFloor() {
-		this.getChildren().add(new Floor(1000, 700));
-		this.getChildren().add(new Floor(1000 - 95, 700 - 55));
-		this.getChildren().add(new Floor(1000 - 95 * 2, 700 - 55 * 2));
-		this.getChildren().add(new Floor(1000 - 95, 700 - 55 * 3));
-		this.getChildren().add(new Floor(1000, 700 - 55 * 4));
-		this.getChildren().add(new Floor(1000 + 95, 700 - 55 * 5));
-	}
-	
-	private class Floor extends Polygon{
+	private static class Floor extends Polygon{
 		private final double radiusY = 55;			 // ∂Ã∞Î÷·≥§
 		private final double radiusX = radiusY * 1.732;// ≥§∞Î÷·≥§
 		
@@ -152,7 +156,7 @@ public class HowToPlayPane extends Pane{
 		}
 	}
 
-	private class Hand extends Group {
+	private static class Hand extends Group {
 		private Polygon hand = new Polygon();
 		private Rectangle r = new Rectangle(10, 140, 80, 20);
 		

@@ -1,4 +1,4 @@
-package game.button;
+package game.baseButton;
 
 import javafx.scene.Group;
 import javafx.scene.effect.BoxBlur;
