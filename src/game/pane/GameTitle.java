@@ -107,11 +107,11 @@ public class GameTitle extends Pane{
 			
 			// 第一次游戏显示 HowToPlay 面板，默认进入 Menu 面板
 			if (Game.firstPlay) {
-				Game.showPane(HowToPlay.pane);
+				Game.toFront(HowToPlay.pane);
 				HowToPlay.play();
 				HowToPlay.status = true;
 			} else {
-				Game.showPane(Menu.pane);
+				Game.toFront(Menu.pane);
 				Menu.pane.requestFocus();
 				Menu.status = true;
 			}

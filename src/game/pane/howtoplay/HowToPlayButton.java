@@ -14,10 +14,10 @@ public class HowToPlayButton extends HexagonButton{
 	public HowToPlayButton() {
 		super(200, 55);
 		
-		text.setLayoutX(-160);
-		text.setLayoutY(20);
+		text.setLayoutX(-270 / 2);
+		text.setLayoutY(50 / 2);
 		text.setFill(Color.WHITE);
-		text.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 45));
+		text.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 65));
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
 		text.setEffect(dropShadow);

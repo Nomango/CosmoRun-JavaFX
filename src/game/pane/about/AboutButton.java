@@ -1,4 +1,4 @@
-package game.pane.option;
+package game.pane.about;
 
 import game.baseButton.HexagonButton;
 import javafx.scene.effect.BoxBlur;
@@ -7,12 +7,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-public class LogButton extends HexagonButton{
+public class AboutButton extends HexagonButton{
 	private Circle c = new Circle(25);
 	private Circle c2 = new Circle(3.5);
 	private Rectangle r = new Rectangle(-3, -3, 6, 20);
 	
-	public LogButton() {
+	public AboutButton() {
 		c2.setLayoutY(-10);
 		
 		c.setFill(Color.WHITE);

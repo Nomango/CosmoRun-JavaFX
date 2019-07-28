@@ -48,7 +48,7 @@ public class HowToPlay {
 				status = false;
 				Fade fade = new Fade(pane);
 				fade.setOnFinished(f -> {
-					Game.showPane(Menu.pane);
+					Game.toFront(Menu.pane);
 					Menu.pane.requestFocus();
 					Menu.status = true;
 				});
@@ -58,9 +58,9 @@ public class HowToPlay {
 		pane.getChildren().add(closeButton);
 		
 		howToPlayTitle.setLayoutX(Game.width / 2 - 180);
-		howToPlayTitle.setLayoutY(130);
+		howToPlayTitle.setLayoutY(140);
 		howToPlayTitle.setFill(Color.hsb(0, 0.0, 1.0, 0.90));
-		howToPlayTitle.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 55));
+		howToPlayTitle.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 80));
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
 		howToPlayTitle.setEffect(dropShadow);
@@ -70,7 +70,7 @@ public class HowToPlay {
 		howToPlayText.setLayoutX(110);
 		howToPlayText.setLayoutY(400);
 		howToPlayText.setFill(Color.WHITE);
-		howToPlayText.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 45));
+		howToPlayText.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 65));
 		howToPlayText.setEffect(dropShadow);
 		pane.getChildren().add(howToPlayText);
 		

@@ -1,4 +1,4 @@
-package game.pane.option;
+package game.pane.updateLog;
 
 import game.baseButton.HexagonButton;
 import javafx.scene.effect.BoxBlur;
@@ -8,16 +8,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class AboutButton extends HexagonButton{
-	private Text text = new Text("ABOUT");
+public class LogButton extends HexagonButton{
+	private Text text = new Text("Update Log");
 	
-	public AboutButton() {
-		super(200, 55);
+	public LogButton() {
+		super(130, 55);
 		
-		text.setLayoutX(-80);
-		text.setLayoutY(20);
+		text.setLayoutX(-220 / 2);
+		text.setLayoutY(50 / 2);
 		text.setFill(Color.WHITE);
-		text.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 45));
+		text.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 65));
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
 		text.setEffect(dropShadow);

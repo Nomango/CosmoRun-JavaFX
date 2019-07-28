@@ -10,8 +10,8 @@ public class MenuBackground extends Pane{
 	public MenuBackground() {
 		Rectangle background1 = new Rectangle(0, 0, Game.width, Game.height * 0.25);
 		Rectangle background2 = new Rectangle(0, Game.height * 0.25, Game.width, Game.height);
-		background1.setFill(Color.rgb(60, 55, 87, 0.5));
-		background2.setFill(Color.rgb(63, 38, 75, 0.6));
+		background1.setFill(Color.rgb(60, 55, 87, 0.6));
+		background2.setFill(Color.rgb(63, 38, 75, 0.7));
 		this.getChildren().addAll(background1, background2);
 	}
 	

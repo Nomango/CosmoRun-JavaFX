@@ -1,5 +1,7 @@
 package game.object;
 
+import java.util.Vector;
+
 import game.Game;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,43 +10,62 @@ import javafx.scene.Node;
 
 public class Floors {
 	public static Group group = new Group();
+	public static Vector<Floor> hideFloors = new Vector<>();
 	public static Group floorsShadow = new Group();
-	private static Floor hide;
+	public static double moveX = 0;
+	public static double moveY = 0;
 	
 	static {
-		floorsShadow.translateXProperty().bind(group.translateXProperty());
-		floorsShadow.translateYProperty().bind(group.translateYProperty());
+		hideFloors.setSize(10);
 	}
 	
 	public static void move(double dx, double dy) {
-		group.setTranslateX(group.getTranslateX() + dx / 3.5);
-		group.setTranslateY(group.getTranslateY() + dy / 3.5);
+		for (Node f: group.getChildren()) {
+			((Floor)f).setCenter(((Floor)f).getX() + dx, ((Floor)f).getY() + dy);
+		}
+		for (Floor f: hideFloors) {
+			f.setCenter(f.getX() + dx, f.getY() + dy);
+		}
+		
+		// 记录移动值，这个值用于重新开始游戏时的动画
+		moveX += dx;
+		moveY += dy;
+		if (moveX > 1200) moveX = 1200;
+		if (moveX < -1200) moveX = -1200;
+		if (moveY > 900) moveY = 900;
+		if (moveY < -900) moveY = -900;
+	}
+	
+	public static void setHeadFloor(Floor f) {
+		hideFloors.add(f);
+		for (int i = 0; i < 9; i++) {
+			Floors.addHideFloor();
+		}
 	}
 	
 	public static void clear() {
 		group.getChildren().clear();
+		hideFloors.clear();
 		floorsShadow.getChildren().clear();
 	}
 	
-	public static Floor getHide() {
-		return hide;
+	public static void addHideFloor() {
+		Floor f = FloorManager.getNewFloor(hideFloors.get(hideFloors.size() - 1));
+		if (hideFloors.size() > 2 && Floors.isCollision(f)) {
+			f = null;
+			hideFloors.remove(hideFloors.size() - 1);
+			hideFloors.remove(hideFloors.size() - 1);
+			addHideFloor();
+			addHideFloor();
+			addHideFloor();
+		} else {
+			hideFloors.add(f);
+		}
 	}
 	
-	public static void resetHide() {
-		hide = FloorManager.getNewFloor(get(size() - 1));
-	}
-	
-	public static void showHide() {
-		FloorManager.show(hide);
-	}
-	
-	public static void setHide(Floor f) {
-		hide = f;
-	}
-	
-	public static boolean add(Floor f) {
+	public static void add(Floor f) {
 		floorsShadow.getChildren().add(f.shadow);
-		return group.getChildren().add(f);
+		group.getChildren().add(f);
 	}
 	
 	public static Floor get(int i) {
@@ -71,9 +92,7 @@ public class Floors {
 	
 	public static boolean isOutOfFloors() {
 		for (Node f: group.getChildren()) {
-			if (((Floor)f).contains(
-					Game.width / 2 - group.getTranslateX(), 
-					Game.height / 2 - group.getTranslateY())) {
+			if (((Floor)f).contains(Game.width / 2, Game.height / 2)) {
 				return false;
 			}
 		}
@@ -81,10 +100,12 @@ public class Floors {
 	}
 	
 	public static void setFloorColor() {
+		for (Floor f: hideFloors) {
+			FloorManager.setColor(f, Game.bkMode);
+		}
 		for (Node f: group.getChildren()) {
 			FloorManager.setColor((Floor)f, Game.bkMode);
 		}
-		FloorManager.setColor(hide, Game.bkMode);
 	}
 	
 	public static void setOnHideAllFinished(EventHandler<ActionEvent> e) {
@@ -93,34 +114,20 @@ public class Floors {
 	
 	public static void hideAll() {
 		for (Node f: group.getChildren()) {
-			FloorManager.hide(((Floor)f));
+			FloorManager.hide(((Floor)f), 200);
 		}
 	}
 	
-	public static void setTranslateX(double x) {
-		group.setTranslateX(x);
-	}
-	
-	public static void setTranslateY(double y) {
-		group.setTranslateY(y);
-	}
-	
-	public static double getTranslateX() {
-		return group.getTranslateX();
-	}
-	
-	public static double getTranslateY() {
-		return group.getTranslateY();
-	}
-	
 	// 判断板块位置是否和其他板块冲突
-	public static boolean isCollisionWith(Floor floor) {
-		for (int i = 0; i < size() - 1; i++) {
-			Floor f = get(i);
-			for (int j = 0; j < 16; j += 2) {
-				if (f.contains(floor.getLayoutX() + floor.range[j], floor.getLayoutY() + floor.range[j + 1])) {
-					return true;
-				}
+	public static boolean isCollision(Floor floor) {
+		for (int i = 0; i < hideFloors.size() - 2; i++) {
+			if (hideFloors.get(i).isCollisionWith(floor)) {
+				return true;
+			}
+		}
+		for (Node f: group.getChildren()) {
+			if (((Floor)f).isCollisionWith(floor)) {
+				return true;
 			}
 		}
 		return false;

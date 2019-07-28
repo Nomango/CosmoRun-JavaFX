@@ -1,11 +1,5 @@
 package game;
 
-/**
- * @author 宫泽先生
- * @date 2016/6/18
- * @version 1.4
- */
-
 import game.animation.Show;
 import game.music.Music;
 import game.pane.Display;
@@ -13,16 +7,22 @@ import game.pane.GameTitle;
 import game.pane.about.About;
 import game.pane.background.Background;
 import game.pane.howtoplay.HowToPlay;
-import game.pane.log.Log;
 import game.pane.menu.Menu;
 import game.pane.option.Option;
 import game.pane.over.GameOver;
+import game.pane.updateLog.UpdateLog;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+/**
+ * @author 宫泽先生
+ * @date 2016/6/23
+ * @version 1.5
+ */
 
 public class Game extends Application{
 	public final static double width = 1200;	// 窗口宽度
@@ -53,15 +53,13 @@ public class Game extends Application{
 		primaryStage.setTitle("Cosmo Run");
 		// 场景和大小
 		primaryStage.setScene(new Scene(pane, width, height));
+		// 固定窗口大小
+		primaryStage.setWidth(width);
+		primaryStage.setHeight(height);
+		primaryStage.setResizable(false);
 		// 打开窗口
 		primaryStage.show();
 
-		// 固定窗口大小
-		primaryStage.setMaxHeight(primaryStage.getHeight());
-		primaryStage.setMaxWidth(primaryStage.getWidth());
-		primaryStage.setMinHeight(primaryStage.getHeight());
-		primaryStage.setMinWidth(primaryStage.getWidth());
-		
 		// 关闭窗口
 		primaryStage.setOnCloseRequest(e -> close());
 	}
@@ -76,23 +74,25 @@ public class Game extends Application{
 		Display.load();
 		Menu.load();
 		GameOver.load();
-		Log.load();
+		UpdateLog.load();
 		HowToPlay.load();
 		Option.load();
 		About.load();
+		
 		// 设置全透明
 		Background.pane.setOpacity(0.0);
 		Menu.pane.setOpacity(0.0);
 		GameOver.pane.setOpacity(0.0);
-		Log.pane.setOpacity(0.0);
+		UpdateLog.pane.setOpacity(0.0);
 		HowToPlay.pane.setOpacity(0.0);
 		Option.pane.setOpacity(0.0);
 		About.pane.setOpacity(0.0);
+		
 		// 底层是 Background.pane 和 Display.pane
 		// 上层是 Menu.pane, GameOver.pane, Log.pane, HowToPlay.pane, Option.pane, About.pane
 		pane.getChildren().addAll(
 				Background.pane, Display.pane, 
-				Menu.pane, GameOver.pane, Log.pane, HowToPlay.pane, Option.pane, About.pane);
+				Menu.pane, GameOver.pane, UpdateLog.pane, HowToPlay.pane, Option.pane, About.pane);
 	}
 	
 	/*
@@ -114,7 +114,7 @@ public class Game extends Application{
 	/*
 	 * 将面板置于最前
 	 */
-	public static void showPane(Node node) {
+	public static void toFront(Node node) {
 		Show.setNode(node);
 		node.toFront();
 	}

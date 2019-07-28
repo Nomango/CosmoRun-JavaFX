@@ -1,4 +1,4 @@
-package game.pane.menu;
+package game.pane.option;
 
 import game.baseButton.HexagonButton;
 import javafx.scene.effect.BoxBlur;

@@ -31,7 +31,7 @@ public class GameOver {
 					Fade.setNode(pane);
 					Display.playResetAnimation();
 					Display.setOnResetFinished(f -> {
-						Game.showPane(Menu.pane);
+						Game.toFront(Menu.pane);
 						Menu.pane.requestFocus();
 						Menu.status = true;
 					});
@@ -51,7 +51,7 @@ public class GameOver {
 				Fade.setNode(pane);
 				Display.playResetAnimation();
 				Display.setOnResetFinished(f -> {
-					Game.showPane(Menu.pane);
+					Game.toFront(Menu.pane);
 					Menu.pane.requestFocus();
 					Menu.status = true;
 				});
@@ -64,10 +64,10 @@ public class GameOver {
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
 		
-		endTitle.setLayoutX((Game.width - 500)/ 2);
+		endTitle.setLayoutX((Game.width - 390)/ 2);
 		endTitle.setLayoutY(Game.height / 5.5);
 		endTitle.setFill(Color.WHITE);
-		endTitle.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 90));
+		endTitle.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 120));
 		endTitle.setEffect(dropShadow);
 		
 		scoreText.setLayoutX((Game.width - 40)/ 2);
@@ -79,7 +79,7 @@ public class GameOver {
 		bestScoreText.setLayoutX((Game.width - 170)/ 2);
 		bestScoreText.setLayoutY(Game.height / 2.4);
 		bestScoreText.setFill(Color.hsb(0, 0.0, 1.0, 0.90));
-		bestScoreText.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 45));
+		bestScoreText.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 65));
 		bestScoreText.setEffect(dropShadow);
 		
 		pane.getChildren().addAll(scoreText, bestScoreText, endTitle);
@@ -88,7 +88,7 @@ public class GameOver {
 	public static void setScore(int score, int bestScore) {
 		scoreText.setText(score + "");
 		if (bestScore != 0) {
-			bestScoreText.setText("BEST " + bestScore);
+			bestScoreText.setText(String.format("BEST %3d", bestScore));
 		}
 	}
 

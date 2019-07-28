@@ -22,7 +22,7 @@ public class FloorManager {
 
 	public final static double radiusY = 45; // 短半轴长
 	public final static double radiusX = radiusY * 1.732;// 长半轴长
-	public final static double ex = 3.2; 	// 用于判断范围的标准量
+	public final static double ex = 6; 	// 用于判断范围的标准量
 	public static ScaleTransition hide;
 
 	private static Mode mode;
@@ -30,10 +30,14 @@ public class FloorManager {
 	private static Direct direct;
 	private static double x, y;
 
-	public static Floor getFirstFloor() {
-		Floor f = new Floor();
-		randomFirstMode(f);
+	public static Floor getHeadFloor() {
+		// 随机头板块模式
+		randomFirstMode();
+		// 创建新板块
+		Floor f = new Floor(mode, mainMode, direct, x, y);
+		// 设置板块坐标
 		setCoordinate(f);
+		// 设置板块颜色
 		setColor(f);
 		return f;
 	}
@@ -50,60 +54,60 @@ public class FloorManager {
 		return f;
 	}
 	
-	public static void show(Floor f) {
+	public static void show(Floor f, int millis) {
 		f.shadow.setScaleX(0.0);
 		f.shadow.setScaleY(0.0);
-		ScaleTransition st = new ScaleTransition(Duration.millis(170), f.shadow);
+		ScaleTransition st = new ScaleTransition(Duration.millis(millis * 2), f.shadow);
 		st.setByX(1.0f);
 		st.setByY(1.0f);
 		st.play();
 		
 		f.setScaleX(0.0);
 		f.setScaleY(0.0);
-		st = new ScaleTransition(Duration.millis(200), f);
+		st = new ScaleTransition(Duration.millis(millis), f);
 		st.setByX(1.0f);
 		st.setByY(1.0f);
 		st.play();
 		
-		Floors.add(f);
+		Floors.add(f);	// 在界面中显示板块
 	}
 	
-	public static void hide(Floor f) {
-		hide = new ScaleTransition(Duration.millis(100), f.shadow);
+	public static void hide(Floor f, int millis) {
+		hide = new ScaleTransition(Duration.millis(millis * 0.5), f.shadow);
 		hide.setByX(-1.0f);
 		hide.setByY(-1.0f);
 		hide.play();
 		
-		hide = new ScaleTransition(Duration.millis(200), f);
+		hide = new ScaleTransition(Duration.millis(millis), f);
 		hide.setByX(-1.0f);
 		hide.setByY(-1.0f);
 		hide.setOnFinished(e -> Floors.remove(f));
 		hide.play();
 	}
 
-	private static void randomFirstMode(Floor f) {
+	private static void randomFirstMode() {
 		// 设置形状中心
-		f.setLayoutX(Game.width / 2);
-		f.setLayoutY(Game.height / 2);
-
-		f.mainMode = MainMode.F1;
+		x = Game.width / 2 + Floors.moveX;
+		y = Game.height / 2 + Floors.moveY;
+		
+		mainMode = MainMode.F1;
 		// 随机板块模式
 		switch ((int) (Math.random() * 4)) {
 		case 0:
-			f.direct = Direct.LEFT_DOWN;
-			f.mode = Mode.F1_LEFT_DOWN;
+			direct = Direct.LEFT_DOWN;
+			mode = Mode.F1_LEFT_DOWN;
 			break;
 		case 1:
-			f.direct = Direct.LEFT_UP;
-			f.mode = Mode.F1_LEFT_UP;
+			direct = Direct.LEFT_UP;
+			mode = Mode.F1_LEFT_UP;
 			break;
 		case 2:
-			f.direct = Direct.RIGHT_DOWN;
-			f.mode = Mode.F1_RIGHT_DOWN;
+			direct = Direct.RIGHT_DOWN;
+			mode = Mode.F1_RIGHT_DOWN;
 			break;
 		case 3:
-			f.direct = Direct.RIGHT_UP;
-			f.mode = Mode.F1_RIGHT_UP;
+			direct = Direct.RIGHT_UP;
+			mode = Mode.F1_RIGHT_UP;
 			break;
 		}
 	}
@@ -116,229 +120,229 @@ public class FloorManager {
 		case F1_LEFT_UP:
 			if (rand == 0) {
 				mode = Mode.F1_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 1) {
 				mode = Mode.F1_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 2) {
 				mode = Mode.F1_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F3_UP;
-				x = prevFloor.getLayoutX() - radiusX / 2;
-				y = prevFloor.getLayoutY() - radiusY * 1.5;
+				x = prevFloor.getX() - radiusX / 2;
+				y = prevFloor.getY() - radiusY * 1.5;
 			}
 			break;
 		case F1_LEFT_DOWN:
 			if (rand == 0) {
 				mode = Mode.F1_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 1) {
 				mode = Mode.F1_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 2) {
 				mode = Mode.F1_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_DOWN;
-				x = prevFloor.getLayoutX() - radiusX / 2;
-				y = prevFloor.getLayoutY() + radiusY * 1.5;
+				x = prevFloor.getX() - radiusX / 2;
+				y = prevFloor.getY() + radiusY * 1.5;
 			}
 			break;
 		case F1_RIGHT_DOWN:
 			if (rand == 0) {
 				mode = Mode.F1_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 1) {
 				mode = Mode.F1_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 2) {
 				mode = Mode.F1_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F3_DOWN;
-				x = prevFloor.getLayoutX() + radiusX / 2;
-				y = prevFloor.getLayoutY() + radiusY * 1.5;
+				x = prevFloor.getX() + radiusX / 2;
+				y = prevFloor.getY() + radiusY * 1.5;
 			}
 			break;
 		case F1_RIGHT_UP:
 			if (rand == 0) {
 				mode = Mode.F1_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 1) {
 				mode = Mode.F1_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 2) {
 				mode = Mode.F1_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_UP;
-				x = prevFloor.getLayoutX() + radiusX / 2;
-				y = prevFloor.getLayoutY() - radiusY * 1.5;
+				x = prevFloor.getX() + radiusX / 2;
+				y = prevFloor.getY() - radiusY * 1.5;
 			}
 			break;
 		case F2_UP:
 			if (rand == 0) {
 				mode = Mode.F1_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX / 2;
-				y = prevFloor.getLayoutY() - radiusY * 1.5;
+				x = prevFloor.getX() + radiusX / 2;
+				y = prevFloor.getY() - radiusY * 1.5;
 			} else if (rand == 1) {
 				mode = Mode.F2_UP;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() - radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() - radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F2_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() + radiusY;
 			}
 			break;
 		case F2_DOWN:
 			if (rand == 0) {
 				mode = Mode.F1_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX / 2;
-				y = prevFloor.getLayoutY() + radiusY * 1.5;
+				x = prevFloor.getX() - radiusX / 2;
+				y = prevFloor.getY() + radiusY * 1.5;
 			} else if (rand == 1) {
 				mode = Mode.F2_DOWN;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() + radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() + radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F2_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() + radiusY;
 			}
 			break;
 		case F2_LEFT_UP:
 			if (rand == 0) {
 				mode = Mode.F3_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY();
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY();
 			} else if (rand == 1) {
 				mode = Mode.F2_UP;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() - radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() - radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F2_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_DOWN;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() + radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() + radiusY * 2;
 			}
 			break;
 		case F2_RIGHT_DOWN:
 			if (rand == 0) {
 				mode = Mode.F3_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY();
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY();
 			} else if (rand == 1) {
 				mode = Mode.F2_UP;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() - radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() - radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F2_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_DOWN;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() + radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() + radiusY * 2;
 			}
 			break;
 		case F3_UP:
 			if (rand == 0) {
 				mode = Mode.F1_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX / 2;
-				y = prevFloor.getLayoutY() - radiusY * 1.5;
+				x = prevFloor.getX() - radiusX / 2;
+				y = prevFloor.getY() - radiusY * 1.5;
 			} else if (rand == 1) {
 				mode = Mode.F3_UP;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() - radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() - radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F3_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F3_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() - radiusY;
 			}
 			break;
 		case F3_DOWN:
 			if (rand == 0) {
 				mode = Mode.F1_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX / 2;
-				y = prevFloor.getLayoutY() + radiusY * 1.5;
+				x = prevFloor.getX() + radiusX / 2;
+				y = prevFloor.getY() + radiusY * 1.5;
 			} else if (rand == 1) {
 				mode = Mode.F3_DOWN;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() + radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() + radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F3_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F3_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() - radiusY;
 			}
 			break;
 		case F3_LEFT_DOWN:
 			if (rand == 0) {
 				mode = Mode.F3_UP;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() - radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() - radiusY * 2;
 			} else if (rand == 1) {
 				mode = Mode.F3_DOWN;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() + radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() + radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F3_LEFT_DOWN;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY() + radiusY;
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY() + radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_LEFT_UP;
-				x = prevFloor.getLayoutX() - radiusX;
-				y = prevFloor.getLayoutY();
+				x = prevFloor.getX() - radiusX;
+				y = prevFloor.getY();
 			}
 			break;
 		case F3_RIGHT_UP:
 			if (rand == 0) {
 				mode = Mode.F3_UP;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() - radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() - radiusY * 2;
 			} else if (rand == 1) {
 				mode = Mode.F3_DOWN;
-				x = prevFloor.getLayoutX();
-				y = prevFloor.getLayoutY() + radiusY * 2;
+				x = prevFloor.getX();
+				y = prevFloor.getY() + radiusY * 2;
 			} else if (rand == 2) {
 				mode = Mode.F3_RIGHT_UP;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY() - radiusY;
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY() - radiusY;
 			} else if (rand == 3) {
 				mode = Mode.F2_RIGHT_DOWN;
-				x = prevFloor.getLayoutX() + radiusX;
-				y = prevFloor.getLayoutY();
+				x = prevFloor.getX() + radiusX;
+				y = prevFloor.getY();
 			}
 			break;
 		}
@@ -424,8 +428,9 @@ public class FloorManager {
 					(radiusY + ex) * 1.5, -(radiusX + 1.732 * ex) / 2, 0.0};
 			break;
 		}
-		newFloor.shadow.setLayoutX(newFloor.getLayoutX());
-		newFloor.shadow.setLayoutY(newFloor.getLayoutY() + 15);
+		
+		newFloor.shadow.layoutXProperty().bind(newFloor.layoutXProperty());
+		newFloor.shadow.layoutYProperty().bind(newFloor.layoutYProperty().add(15));
 	}
 
 	private static void setColor(Floor f) {

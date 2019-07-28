@@ -3,7 +3,10 @@ package game.pane.menu;
 import game.Game;
 import game.animation.Fade;
 import game.pane.Display;
+import game.pane.about.About;
+import game.pane.about.AboutButton;
 import game.pane.option.Option;
+import game.pane.option.OptionButton;
 import javafx.animation.ScaleTransition;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
@@ -21,6 +24,7 @@ public class Menu {
 	public static boolean status = false;
 	private static ImageView menuTitle = new ImageView("game/sources/title.png");
 	private static OptionButton btOption = new OptionButton();
+	private static AboutButton btAbout = new AboutButton();
 	private static PlayButton btPlay = new PlayButton();
 	private static Text bestScoreText = new Text();
 	
@@ -59,7 +63,7 @@ public class Menu {
 		bestScoreText.setLayoutX((Game.width - 170)/ 2);
 		bestScoreText.setLayoutY(Game.height / 2.4);
 		bestScoreText.setFill(Color.hsb(0, 0.0, 1.0, 0.90));
-		bestScoreText.setFont(Font.font("Î¢ÈíÑÅºÚ",FontWeight.BOLD, 45));
+		bestScoreText.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 65));
 		bestScoreText.setEffect(dropShadow);
 		
 		pane.getChildren().addAll(bestScoreText, menuTitle);
@@ -78,32 +82,45 @@ public class Menu {
 				});
 			}
 		});
-		
-		btOption.setLayoutX(Game.width / 1.2 + 10);
-		btOption.setLayoutY(Game.height / 2 - 20);
-		btOption.setOnMouseClicked(e -> {
-			if (status) {
-				status = false;
-				Fade fade = new Fade(pane);
-				fade.setOnFinished(f -> {
-					Game.showPane(Option.pane);
-					Option.status = true;
-				});
-			}
-		});
-		pane.getChildren().addAll(btOption, btPlay);
-		
 		ScaleTransition st = new ScaleTransition(Duration.millis(1000), btPlay);
 		st.setByX(0.15f);
 		st.setByY(0.15f);
 		st.setAutoReverse(true);
 		st.setCycleCount(-1);
 		st.play();
+		
+		btOption.setLayoutX(Game.width / 1.2 + 10);
+		btOption.setLayoutY(Game.height / 2 - 30);
+		btOption.setOnMouseClicked(e -> {
+			if (status) {
+				status = false;
+				Fade fade = new Fade(pane);
+				fade.setOnFinished(f -> {
+					Game.toFront(Option.pane);
+					Option.status = true;
+				});
+			}
+		});
+		pane.getChildren().addAll(btOption, btPlay);
+		
+		btAbout.setLayoutX(Game.width / 1.2 + 10);
+		btAbout.setLayoutY(Game.height / 2 + 140);
+		btAbout.setOnMouseClicked(e -> {
+			if (status) {
+				status = false;
+				Fade fade = new Fade(pane);
+				fade.setOnFinished(f -> {
+					Game.toFront(About.pane);
+					About.status = true;
+				});
+			}
+		});
+		pane.getChildren().add(btAbout);
 	}
 	
 	public static void setBestScore(int bestScore) {
 		if (bestScore != 0) {
-			bestScoreText.setText("BEST " + bestScore);
+			bestScoreText.setText(String.format("BEST %3d", bestScore));
 		}
 	}
 

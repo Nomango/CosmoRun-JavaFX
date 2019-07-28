@@ -1,10 +1,10 @@
-package game.pane.log;
+package game.pane.updateLog;
 
 import game.Game;
 import game.animation.Fade;
 import game.baseButton.CloseButton;
+import game.pane.about.About;
 import game.pane.background.MenuBackground;
-import game.pane.option.Option;
 import javafx.scene.Group;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
@@ -15,11 +15,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class Log extends Pane{
+public class UpdateLog extends Pane{
 	public static Pane pane = new Pane();
 	public static boolean status = false;
 	private static CloseButton closeButton = new CloseButton();
-	private static Text logTitle = new Text("更新日志");
+	private static Text logTitle = new Text("Update Log");
 	private static LogText logText = new LogText();
 	
 	public static void load() {
@@ -36,8 +36,8 @@ public class Log extends Pane{
 				status = false;
 				Fade fade = new Fade(pane);
 				fade.setOnFinished(f -> {
-					Game.showPane(Option.pane);
-					Option.status = true;
+					Game.toFront(About.pane);
+					About.status = true;
 					logText.setTextY(0);
 				});
 			}
@@ -47,9 +47,9 @@ public class Log extends Pane{
 	
 	private static void initText() {
 		logTitle.setLayoutX(240);
-		logTitle.setLayoutY(130);
+		logTitle.setLayoutY(140);
 		logTitle.setFill(Color.hsb(0, 0.0, 1.0, 0.90));
-		logTitle.setFont(Font.font("微软雅黑",FontWeight.BOLD, 55));
+		logTitle.setFont(Font.font("Gill Sans MT Condensed", FontWeight.BOLD, 80));
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
 		logTitle.setEffect(dropShadow);
@@ -94,18 +94,28 @@ class LogText extends Pane {
 				"     优化了内存占用\n" + 
 				"     增加了板块阴影\n" + 
 				"     增加了新的背景颜色\n");
+		Text logText5 = new Text(
+				"v1.5  2016.6.23更新\n" + 
+				"     优化了游戏流畅性\n" + 
+				"     调整了游戏速度，现在会越来越快\n" + 
+				"     调整了界面布局\n" + 
+				"     修复了BUG:\n" + 
+				"         新建板块线程崩溃导致游戏卡死\n" + 
+				"         游戏过程中内存飙升\n" + 
+				"         相同类型的四个板块连在一起\n");
 		Text logTextProblem = new Text(
 				"已知的问题:\n" + 
-				"     内存和CPU占用依然很大\n" + 
-				"     小几率出现新建板块线程崩溃导致游戏卡死\n" + 
-				"     小几率出现相同类型的四个板块连在一起\n");
+				"     内存占用依然很大\n" + 
+				"     极小几率出现致命错误导致游戏终止\n");
 		
 		logText1.setLayoutY(50);
 		logText2.setLayoutY(430);
 		logText3.setLayoutY(750);
 		logText4.setLayoutY(1020);
-		logTextProblem.setLayoutY(1400);
-		logText.getChildren().addAll(logText1, logText2, logText3, logText4, logTextProblem);
+		logText5.setLayoutY(1400);
+		logTextProblem.setLayoutY(1880);
+		logText.getChildren().addAll(
+				logText1, logText2, logText3, logText4, logText5, logTextProblem);
 		
 		DropShadow dropShadow = new DropShadow(5, 3, 3, Color.hsb(0, 0.0, 0.2, 0.3));
 		dropShadow.setInput(new BoxBlur(2, 2, 1));
@@ -124,8 +134,8 @@ class LogText extends Pane {
 			logText.setLayoutY(logText.getLayoutY() + e.getDeltaY() / 1.5);
 			if (logText.getLayoutY() > 0)
 				logText.setLayoutY(0);
-			if (logText.getLayoutY() < -1260)
-				logText.setLayoutY(-1260);
+			if (logText.getLayoutY() < -1560)
+				logText.setLayoutY(-1560);
 		});
 	}
 	
